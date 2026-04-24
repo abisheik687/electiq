@@ -1,0 +1,35 @@
+/* Global Reset and Aesthetics */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Accessibility: Focus Visible */
+*:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Make sure text has good contrast */
+body {
+  color: #1a1a1a;
+  background-color: #ffffff;
+}
+
+/* Modern clean typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  margin-top: 0;
+}
+
+p {
+  line-height: 1.6;
+}

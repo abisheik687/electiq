@@ -1,0 +1,64 @@
+.calendarContainer {
+  padding: 24px 0;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #0f172a;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.eventCard {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.eventDate {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eventTitle {
+  font-size: 18px;
+  margin: 0 0 8px 0;
+  color: #1e293b;
+}
+
+.eventDetails {
+  font-size: 14px;
+  color: #475569;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.addButton {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #f1f5f9;
+  color: #0f172a;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  border: 1px solid #cbd5e1;
+  text-align: center;
+}
+
+.addButton:hover {
+  background-color: #e2e8f0;
+}

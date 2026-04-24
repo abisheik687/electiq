@@ -1,0 +1,30 @@
+steps:
+  # Step 1: Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/electiq', '.']
+    
+  # Step 2: Push the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/electiq']
+    
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'electiq'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/electiq'
+      - '--platform'
+      - 'managed'
+      - '--region'
+      - 'us-central1'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+      - '--set-env-vars'
+      - 'VITE_GEMINI_KEY=${_VITE_GEMINI_KEY},VITE_MAPS_KEY=${_VITE_MAPS_KEY},VITE_CALENDAR_KEY=${_VITE_CALENDAR_KEY},VITE_TRANSLATE_KEY=${_VITE_TRANSLATE_KEY},VITE_FIREBASE_KEY=${_VITE_FIREBASE_KEY}'
+
+images:
+  - 'gcr.io/$PROJECT_ID/electiq'

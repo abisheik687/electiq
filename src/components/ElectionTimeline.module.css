@@ -1,0 +1,109 @@
+.timelineContainer {
+  padding: 24px 0;
+}
+
+.timelineTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #0f172a;
+}
+
+.stepsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+
+.stepsWrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  width: 2px;
+  background-color: #cbd5e1;
+  z-index: 0;
+}
+
+.stepCard {
+  display: flex;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+  animation: slideIn 0.5s ease-out backwards;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.stepNumber {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+  border: 4px solid #f8fafc;
+}
+
+.stepContent {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  flex: 1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stepContent:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.stepContent h3 {
+  margin: 0 0 4px 0;
+  color: #1e293b;
+}
+
+.deadline {
+  font-size: 14px;
+  color: #dc2626;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.description {
+  color: #475569;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.askButton {
+  background-color: transparent;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.askButton:hover {
+  background-color: #eff6ff;
+}
+
+.loading {
+  text-align: center;
+  padding: 24px;
+  color: #64748b;
+}

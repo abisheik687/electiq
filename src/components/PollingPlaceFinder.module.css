@@ -1,0 +1,64 @@
+.finderContainer {
+  padding: 24px 0;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #0f172a;
+}
+
+.mapContainer {
+  height: 400px;
+  width: 100%;
+  background-color: #f1f5f9;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+}
+
+.loading {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.error {
+  color: #dc2626;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #fef2f2;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+}
+
+.fallbackInput {
+  display: flex;
+  margin-top: 16px;
+  gap: 12px;
+}
+
+.addressInput {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+}
+
+.addressInput:focus {
+  border-color: #2563eb;
+}
+
+.searchButton {
+  padding: 10px 20px;
+  background-color: #0f172a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
