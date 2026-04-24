@@ -3,7 +3,7 @@
 An interactive Election Process Education Assistant built with React, Vite, Express, and Gemini API.
 
 ## Live Demo
-https://electiq-app-demo-url.a.run.app
+https://electiq-758422665969.asia-south1.run.app/
 
 ## Setup
 
