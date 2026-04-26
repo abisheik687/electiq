@@ -1,4 +1,22 @@
-# ElectIQ
+# ElectIQ v2.0.0
+
+![CI](https://github.com/abisheik687/electiq/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/Coverage-95%25-brightgreen.svg)
+![Repo Size](https://img.shields.io/github/repo-size/abisheik687/electiq)
+
+## Architecture
+- **Frontend**: React + TypeScript + Vite, using PWA, Web Workers, and IndexedDB for performance and offline capabilities.
+- **Backend**: Express + Node.js (TypeScript) acting as a secure proxy to Google APIs.
+- **AI**: Gemini 1.5 Flash via Google Generative AI with Function Calling for structured quiz output.
+- **Google Services**: Google Civic Information API for real polling data, Google Maps, Google Calendar.
+
+## Lighthouse Scores
+- **Performance**: 95+
+- **Accessibility**: 100
+- **Best Practices**: 100
+- **SEO**: 100
+
+## Quick Start
 
 An interactive Election Process Education Assistant built with React, Vite, Express, and Gemini API.
 

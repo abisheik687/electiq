@@ -1,11 +1,21 @@
 import { useTranslation } from '../hooks/useTranslation';
-import { getAddToCalendarUrl } from '../services/calendarService';
+import { calendarService } from '../services/CalendarService';
 import styles from './ElectionCalendar.module.css';
+
+interface ElectionEvent {
+  id: number;
+  title: string;
+  date: string;
+  details: string;
+  location: string;
+  start: string;
+  end: string;
+}
 
 export default function ElectionCalendar() {
   const { translate } = useTranslation();
 
-  const events = [
+  const events: ElectionEvent[] = [
     {
       id: 1,
       title: 'Voter Registration Deadline',
@@ -36,7 +46,7 @@ export default function ElectionCalendar() {
             <h3 className={styles.eventTitle}>{translate(event.title)}</h3>
             <p className={styles.eventDetails}>{translate(event.details)}</p>
             <a 
-              href={getAddToCalendarUrl(event.title, event.details, event.location, event.start, event.end)}
+              href={calendarService.getAddToCalendarUrl(event.title, event.details, event.location, event.start, event.end)}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.addButton}

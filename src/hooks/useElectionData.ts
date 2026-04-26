@@ -1,16 +1,11 @@
 import { useState, useEffect } from 'react';
-import { ELECTION_STEPS } from '../constants/electionSteps';
+import { ELECTION_STEPS, ElectionStep } from '../constants/electionSteps';
 
-/**
- * Custom hook to fetch or manage election data/timeline.
- * @returns {Object} { steps, loading }
- */
 export const useElectionData = () => {
-  const [steps, setSteps] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [steps, setSteps] = useState<ElectionStep[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Simulate an API call
     const timer = setTimeout(() => {
       setSteps(ELECTION_STEPS);
       setLoading(false);

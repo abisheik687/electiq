@@ -1,0 +1,19 @@
+name: Repo Size Check
+on: [push, pull_request]
+jobs:
+  size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Check repository size
+        run: |
+          TOTAL=$(git count-objects -vH | grep 'size-pack' | awk '{print $2}' | sed 's/[^0-9.]//g')
+          echo "Pack size: ${TOTAL}"
+          SIZE=$(du -sm . --exclude=.git | cut -f1)
+          echo "Working tree: ${SIZE}MB"
+          if [ "$SIZE" -gt 9 ]; then
+            echo "::error::Repo size ${SIZE}MB exceeds 9MB hard limit"
+            exit 1
+          fi
+          echo "::notice::Repo size ${SIZE}MB — OK"

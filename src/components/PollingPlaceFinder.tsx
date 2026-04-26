@@ -1,33 +1,35 @@
 import { useEffect, useRef, useState } from 'react';
-import { loadGoogleMapsApi } from '../services/mapsService';
+import { mapsService } from '../services/MapsService';
 import { useTranslation } from '../hooks/useTranslation';
 import styles from './PollingPlaceFinder.module.css';
 
 export default function PollingPlaceFinder() {
-  const mapRef = useRef(null);
+  const mapRef = useRef<HTMLDivElement>(null);
   const { translate } = useTranslation();
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const initMap = async () => {
       try {
-        await loadGoogleMapsApi();
+        await mapsService.loadGoogleMapsApi();
         
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
+              if (!mapRef.current) return;
+              
               const userLocation = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
               };
 
-              const map = new window.google.maps.Map(mapRef.current, {
+              const map = new (window as any).google.maps.Map(mapRef.current, {
                 center: userLocation,
                 zoom: 13,
               });
 
-              new window.google.maps.Marker({
+              new (window as any).google.maps.Marker({
                 position: userLocation,
                 map: map,
                 title: translate('Your Location'),
@@ -37,21 +39,23 @@ export default function PollingPlaceFinder() {
               // Mock finding polling stations
               const request = {
                 location: userLocation,
-                radius: '5000',
+                radius: 5000,
                 keyword: 'school OR library OR community center',
               };
 
-              const service = new window.google.maps.places.PlacesService(map);
-              service.nearbySearch(request, (results, status) => {
-                if (status === window.google.maps.places.PlacesServiceStatus.OK && results) {
-                  results.slice(0, 5).forEach(place => {
-                    const marker = new window.google.maps.Marker({
+              const service = new (window as any).google.maps.places.PlacesService(map);
+              service.nearbySearch(request, (results: any, status: any) => {
+                if (status === (window as any).google.maps.places.PlacesServiceStatus.OK && results) {
+                  results.slice(0, 5).forEach((place: any) => {
+                    if (!place.geometry?.location) return;
+                    
+                    const marker = new (window as any).google.maps.Marker({
                       map,
                       position: place.geometry.location,
                       title: place.name,
                     });
 
-                    const infoWindow = new window.google.maps.InfoWindow({
+                    const infoWindow = new (window as any).google.maps.InfoWindow({
                       content: `<div><strong>${place.name}</strong><br>${place.vicinity}</div>`,
                     });
 

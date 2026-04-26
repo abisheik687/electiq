@@ -1,8 +1,12 @@
-/**
- * @fileoverview Constants for election timeline steps.
- */
+export interface ElectionStep {
+  id: number;
+  title: string;
+  description: string;
+  deadline: string;
+  prompt: string;
+}
 
-export const ELECTION_STEPS = [
+export const ELECTION_STEPS: ElectionStep[] = [
   {
     id: 1,
     title: 'Voter Registration',

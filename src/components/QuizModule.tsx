@@ -2,7 +2,15 @@ import { useState } from 'react';
 import { useTranslation } from '../hooks/useTranslation';
 import styles from './QuizModule.module.css';
 
-const QUESTIONS = [
+interface Question {
+  id: number;
+  question: string;
+  options: string[];
+  answer: number;
+  explanation: string;
+}
+
+const QUESTIONS: Question[] = [
   {
     id: 1,
     question: "How does the Electoral College work?",
@@ -31,13 +39,13 @@ const QUESTIONS = [
 
 export default function QuizModule() {
   const { translate } = useTranslation();
-  const [currentQ, setCurrentQ] = useState(0);
-  const [score, setScore] = useState(0);
-  const [showResults, setShowResults] = useState(false);
-  const [selectedOpt, setSelectedOpt] = useState(null);
-  const [answered, setAnswered] = useState(false);
+  const [currentQ, setCurrentQ] = useState<number>(0);
+  const [score, setScore] = useState<number>(0);
+  const [showResults, setShowResults] = useState<boolean>(false);
+  const [selectedOpt, setSelectedOpt] = useState<number | null>(null);
+  const [answered, setAnswered] = useState<boolean>(false);
 
-  const handleOptionSelect = (idx) => {
+  const handleOptionSelect = (idx: number) => {
     if (answered) return;
     setSelectedOpt(idx);
     setAnswered(true);

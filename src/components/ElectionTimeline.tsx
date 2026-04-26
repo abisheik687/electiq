@@ -2,7 +2,11 @@ import { useElectionData } from '../hooks/useElectionData';
 import { useTranslation } from '../hooks/useTranslation';
 import styles from './ElectionTimeline.module.css';
 
-export default function ElectionTimeline({ onAskAi }) {
+interface ElectionTimelineProps {
+  onAskAi: (prompt: string) => void;
+}
+
+export default function ElectionTimeline({ onAskAi }: ElectionTimelineProps) {
   const { steps, loading } = useElectionData();
   const { translate } = useTranslation();
 
