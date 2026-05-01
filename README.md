@@ -57,4 +57,23 @@ To deploy to Google Cloud Run, follow these steps:
 ## Scripts
 - `npm run dev`: Start dev servers
 - `npm run build`: Build for production
-- `npm run test`: Run tests
+- `npm run test`: Run## Security Setup
+
+### Google API Key Restrictions (Required)
+1. Go to Google Cloud Console → APIs & Services → Credentials
+2. For VITE_MAPS_KEY: Add HTTP Referrer restriction to your domain
+3. For VITE_CIVIC_API_KEY: Add HTTP Referrer restriction to your domain
+4. For GEMINI_API_KEY: This is server-only — never expose to the client
+
+### Environment Variables
+| Variable | Location | Description |
+|---|---|---|
+| GEMINI_API_KEY | Server only | Gemini AI — never use VITE_ prefix |
+| JWT_SECRET | Server only | JWT signing secret |
+| SESSION_SECRET | Server only | Session encryption secret |
+| CLIENT_URL | Server only | Allowed CORS origin |
+| VITE_MAPS_KEY | Client | Google Maps JS API |
+| VITE_CIVIC_API_KEY | Client | Civic Information API |
+
+## Deploymentrict each key to only the APIs it needs
+4. Never commit .env files to the repository

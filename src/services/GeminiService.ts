@@ -4,8 +4,8 @@
  */
 
 import { BaseService } from './BaseService';
-import { ChatMessage } from '../types/chat.types';
-import { QuizQuestion } from '../types/quiz.types';
+import { ChatMessage } from '../types/models';
+import { QuizQuestion } from '../types/models';
 
 export class GeminiService extends BaseService {
   private readonly API_URL = '/api/chat';
@@ -17,23 +17,28 @@ export class GeminiService extends BaseService {
    * @param history Chat history.
    * @returns The response text from the AI.
    */
-  public async sendMessage(message: string, history: ChatMessage[]): Promise<string> {
-    const formattedHistory = history.map(msg => ({
-      role: msg.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: msg.content }]
-    }));
-
-    const response = await this.fetchJson<{text: string}>(this.API_URL, {
+  public async sendMessage(message: string, history: ChatMessage[] = []): Promise<string> {
+    const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, history: formattedHistory }),
+      body: JSON.stringify({ message, history })
     });
 
-    if (!response.success || !response.data) {
-      throw new Error(response.error || 'Failed to communicate with Gemini');
-    }
+    const reader = response.body?.getReader();
+    const decoder = new TextDecoder();
+    let result = '';
 
-    return response.data.text;
+    while (reader) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value);
+      const lines = chunk.split('\n').filter(line => line.startsWith('data:'));
+      for (const line of lines) {
+        const data = JSON.parse(line.replace('data: ', ''));
+        if (data.text) result += data.text;
+      }
+    }
+    return result;
   }
 
   /**
@@ -41,17 +46,17 @@ export class GeminiService extends BaseService {
    * @param topic Topic to generate questions for.
    */
   public async generateQuiz(topic: string): Promise<QuizQuestion[]> {
-    const response = await this.fetchJson<{questions: QuizQuestion[]}>(this.QUIZ_API_URL, {
+    const data = await this.request<{questions: QuizQuestion[]}>(this.QUIZ_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ topic }),
     });
 
-    if (!response.success || !response.data) {
-      throw new Error(response.error || 'Failed to generate quiz');
+    if (!data) {
+      throw new Error('Failed to generate quiz');
     }
 
-    return response.data.questions;
+    return data.questions;
   }
 }
 

@@ -52,8 +52,13 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({ history, loading, er
         );
       })}
       {loading && (
-        <div className={`${styles.message} ${styles.aiMessage} ${styles.typingIndicator}`} aria-busy="true">
-          <span>.</span><span>.</span><span>.</span>
+        <div 
+          className={`${styles.message} ${styles.aiMessage} ${styles.typingIndicator}`} 
+          aria-busy="true"
+          aria-label="AI is typing a response"
+          aria-live="polite"
+        >
+          <span aria-hidden="true">•••</span>
         </div>
       )}
       {error && <p className={styles.error} aria-live="assertive">{translate('Error: ')} {error}</p>}

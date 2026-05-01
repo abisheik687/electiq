@@ -37,7 +37,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, disabled }) => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.chatForm}>
+      <label htmlFor="chat-input" className="sr-only" style={{ position: 'absolute', width: '1px', height: '1px', padding: '0', margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: '0' }}>{translate('Type your civic question')}</label>
       <input
+        id="chat-input"
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
@@ -45,7 +47,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, disabled }) => {
         placeholder={translate('Type your question...')}
         maxLength={500}
         className={styles.inputField}
-        aria-label={translate('Chat input')}
+        aria-label={translate('Type your civic question')}
         disabled={disabled}
       />
       <button 

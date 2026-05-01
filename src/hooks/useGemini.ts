@@ -17,7 +17,12 @@ export const useGemini = () => {
     setLoading(true);
     setError(null);
 
-    const hash = await sha256(text.trim().toLowerCase());
+    const cacheKeyBuffer = await crypto.subtle.digest(
+      'SHA-256',
+      new TextEncoder().encode(JSON.stringify({ text: text.trim().toLowerCase(), history }))
+    );
+    const hashArray = Array.from(new Uint8Array(cacheKeyBuffer));
+    const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     const cachedResponse = await getCachedResponse(hash);
 
     const newUserMessage: ChatMessage = {
@@ -101,8 +106,9 @@ export const useGemini = () => {
       }
 
       await setCachedResponse(hash, completeResponse);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const e = err as Error;
+      setError(e.message);
     } finally {
       setLoading(false);
     }

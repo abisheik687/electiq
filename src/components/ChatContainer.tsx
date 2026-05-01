@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import FocusTrap from 'focus-trap-react';
 import { useGemini } from '../hooks/useGemini';
 import { ChatMessages } from './ChatMessages';
 import { ChatInput } from './ChatInput';
@@ -13,10 +14,12 @@ export const ChatContainer: React.FC = () => {
   const { history, loading, error, sendMessage } = useGemini();
 
   return (
-    <div className={styles.chatContainer}>
-      <ChatMessages history={history} loading={loading} error={error} />
-      <ChatInput onSend={sendMessage} disabled={loading} />
-    </div>
+    <FocusTrap active={loading}>
+      <div className={styles.chatContainer}>
+        <ChatMessages history={history} loading={loading} error={error} />
+        <ChatInput onSend={sendMessage} disabled={loading} />
+      </div>
+    </FocusTrap>
   );
 };
 

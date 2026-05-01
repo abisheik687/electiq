@@ -1,10 +1,23 @@
-import React, { Suspense, useState, useRef } from 'react';
+import React, { Suspense, useState, useRef, useEffect } from 'react';
 import { useTranslation } from './hooks/useTranslation';
 import styles from './App.module.css';
+import LanguageSelector from './components/LanguageSelector';
+import ElectionTimeline from './components/ElectionTimeline';
+
+class ErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean}> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error('[ErrorBoundary] Caught error:', error);
+    console.error('[ErrorBoundary] Component stack:', info.componentStack);
+  }
+  render() {
+    if (this.state.hasError) return <div role="alert">Failed to load component. Please refresh.</div>;
+    return this.props.children;
+  }
+}
 
 // Lazy loaded components for code splitting
-const LanguageSelector = React.lazy(() => import('./components/LanguageSelector'));
-const ElectionTimeline = React.lazy(() => import('./components/ElectionTimeline'));
 const ChatContainer = React.lazy(() => import('./components/ChatContainer'));
 const PollingPlaceFinder = React.lazy(() => import('./components/PollingPlaceFinder'));
 const ElectionCalendar = React.lazy(() => import('./components/ElectionCalendar'));
@@ -17,10 +30,17 @@ function App() {
   const [activeTab, setActiveTab] = useState('learn');
   const chatRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const quizRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const refMap: Record<string, React.RefObject<HTMLDivElement>> = {
+      chat: chatRef, quiz: quizRef, map: mapRef
+    };
+    setTimeout(() => refMap[activeTab]?.current?.focus(), 50);
+  }, [activeTab]);
 
   const handleAskAi = (prompt: string) => {
-    // We would typically set this prompt in some global state or context to pass to the chat
-    console.log("Asking AI:", prompt);
     chatRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -32,13 +52,11 @@ function App() {
             <h1>ElectIQ</h1>
             <p>{translate('Your Civic Education Assistant')}</p>
           </div>
-          <Suspense fallback={<SkeletonLoader />}>
-            <LanguageSelector />
-          </Suspense>
+          <LanguageSelector />
         </div>
       </header>
 
-      <nav className={styles.nav}>
+      <nav className={styles.nav} id="main-nav">
         <div className={styles.navContent}>
           <button 
             className={`${styles.navItem} ${activeTab === 'learn' ? styles.active : ''}`}
@@ -57,41 +75,45 @@ function App() {
       </nav>
 
       <main className={styles.main}>
-        <a href="#main-content" className={styles.skipLink}>{translate('Skip to main content')}</a>
-        <a href="#chat-section" className={styles.skipLink}>{translate('Skip to chat')}</a>
-        <a href="#timeline-section" className={styles.skipLink}>{translate('Skip to timeline')}</a>
-        {activeTab !== 'quiz' && (
-           <button onClick={() => setActiveTab('quiz')} className={styles.skipLink}>{translate('Skip to quiz')}</button>
-        )}
+        <a href="#main-nav" className={styles.skipLink}>{translate('Skip to main navigation')}</a>
+
         
         <div id="main-content">
           {activeTab === 'learn' ? (
             <div className={styles.twoColumnGrid}>
               <div className={styles.leftColumn}>
                 <div id="timeline-section" ref={timelineRef} tabIndex={-1}>
-                  <Suspense fallback={<SkeletonLoader />}>
-                    <ElectionTimeline onAskAi={handleAskAi} />
-                  </Suspense>
+                  <ElectionTimeline onAskAi={handleAskAi} />
                 </div>
-                <Suspense fallback={<SkeletonLoader />}>
-                  <ElectionCalendar />
-                </Suspense>
-                <Suspense fallback={<SkeletonLoader />}>
-                  <PollingPlaceFinder />
-                </Suspense>
+                <ErrorBoundary>
+                  <Suspense fallback={<SkeletonLoader />}>
+                    <ElectionCalendar />
+                  </Suspense>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <Suspense fallback={<SkeletonLoader />}>
+                    <div ref={mapRef} tabIndex={-1}>
+                      <PollingPlaceFinder />
+                    </div>
+                  </Suspense>
+                </ErrorBoundary>
               </div>
               <div className={styles.rightColumn} id="chat-section" ref={chatRef} tabIndex={-1}>
                 <h2 className={styles.chatTitle}>{translate('Ask AI Assistant')}</h2>
-                <Suspense fallback={<SkeletonLoader />}>
-                  <ChatContainer />
-                </Suspense>
+                <ErrorBoundary>
+                  <Suspense fallback={<SkeletonLoader />}>
+                    <ChatContainer />
+                  </Suspense>
+                </ErrorBoundary>
               </div>
             </div>
           ) : (
-            <div id="quiz-section" tabIndex={-1}>
-              <Suspense fallback={<SkeletonLoader />}>
-                <QuizModule />
-              </Suspense>
+            <div id="quiz-section" ref={quizRef} tabIndex={-1}>
+              <ErrorBoundary>
+                <Suspense fallback={<SkeletonLoader />}>
+                  <QuizModule />
+                </Suspense>
+              </ErrorBoundary>
             </div>
           )}
         </div>

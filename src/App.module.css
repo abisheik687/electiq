@@ -9,17 +9,23 @@
 
 .skipLink {
   position: absolute;
-  top: -40px;
-  left: 0;
-  background: #000;
-  color: white;
-  padding: 8px;
-  z-index: 100;
-  transition: top 0.2s;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .skipLink:focus {
-  top: 0;
+  width: auto;
+  height: auto;
+  clip: auto;
+  margin: 1rem;
+  padding: 0.5rem 1rem;
+  z-index: 9999;
 }
 
 .header {

@@ -12,21 +12,13 @@ export abstract class BaseService {
    * @param options Fetch options
    * @returns A promise of the standardized API response
    */
-  protected async fetchJson<T>(url: string, options?: RequestInit): Promise<ApiResponse<T>> {
+  protected async request<T>(url: string, options?: RequestInit): Promise<T | null> {
     try {
       const response = await fetch(url, options);
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Request failed with status ${response.status}`);
-      }
-      const data = await response.json();
-      return { data, success: true };
-    } catch (error) {
-      return { 
-        data: null as any, 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Unknown API error' 
-      };
+      if (!response.ok) return null;
+      return await response.json() as T;
+    } catch {
+      return null;
     }
   }
 }

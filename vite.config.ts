@@ -55,12 +55,30 @@ export default defineConfig({
   ],
   build: {
     chunkSizeWarningLimit: 200,
+    outDir: 'dist',
+    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {
-          react: ['react', 'react-dom'],
-          maps: ['@googlemaps/js-api-loader']
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-maps': ['@googlemaps/js-api-loader', '@googlemaps/markerclusterer'],
+          'vendor-security': ['dompurify'],
+          'vendor-i18n': ['i18next', 'react-i18next']
         }
+      }
+    }
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/__tests__/setup.ts',
+    coverage: {
+      provider: 'v8',
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 80,
+        statements: 80
       }
     }
   }
